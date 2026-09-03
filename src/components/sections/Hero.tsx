@@ -208,7 +208,7 @@ export default function Hero() {
       <div className="max-w-6xl w-full mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
           {/* Left - Text */}
-          <motion.div style={{ y: textY, opacity: contentOpacity }} variants={container} initial="hidden" animate="visible" className="flex-1">
+          <motion.div style={{ y: textY, opacity: contentOpacity }} variants={container} initial="hidden" animate="visible" className="flex-1 min-w-0 w-full">
             {/* Hello text */}
             <motion.p variants={item} className="text-text-muted font-mono text-sm tracking-wider mb-2">
               Hello, I am
@@ -225,8 +225,8 @@ export default function Hero() {
             <motion.h1
               variants={item}
               aria-label="Kavishka Deshan"
-              className="font-black leading-[0.85] tracking-tight mb-8"
-              style={{ fontSize: "clamp(4rem, 12vw, 8rem)" }}
+              className="font-black leading-[0.85] tracking-tight mb-8 max-w-full break-words"
+              style={{ fontSize: "clamp(2.35rem, 11.5vw, 8rem)" }}
             >
               <span className="block">
                 <AnimatedName text="KAVISHKA" />
@@ -304,14 +304,17 @@ export default function Hero() {
           {/* Right - Photo */}
           <motion.div
             style={{ y: photoY }}
-            initial={{ opacity: 0, scale: 0.8, x: 50 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="flex-shrink-0 relative hidden lg:block"
+            /* Was `hidden lg:block` — the portrait did not render at all on
+               phones or most tablets. It is visible at every width now, with the
+               entrance x-offset only applied where there is room for it. */
+            className="flex-shrink-0 relative order-first lg:order-none mb-4 lg:mb-0"
           >
             {/* Ambient bloom */}
             <motion.div
-              className="absolute inset-[-50px] rounded-full pointer-events-none"
+              className="absolute inset-[-28px] lg:inset-[-50px] rounded-full pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle, color-mix(in srgb, var(--color-accent) 16%, transparent) 0%, transparent 70%)",
@@ -335,7 +338,7 @@ export default function Hero() {
 
             {/* Dashed orbit + travelling node */}
             <motion.div
-              className="absolute inset-[-26px] rounded-full pointer-events-none"
+              className="absolute inset-[-16px] lg:inset-[-26px] rounded-full pointer-events-none"
               style={{
                 border: "1px dashed color-mix(in srgb, var(--color-accent) 22%, transparent)",
               }}
@@ -362,7 +365,7 @@ export default function Hero() {
               lighting and the two overlays can all react together.
             */}
             <motion.div
-              className="photo-frame group relative w-72 h-72 xl:w-80 xl:h-80 rounded-full overflow-hidden bg-bg-card cursor-pointer"
+              className="photo-frame group relative w-52 h-52 sm:w-64 sm:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full overflow-hidden bg-bg-card cursor-pointer"
               style={{
                 border: "2px solid color-mix(in srgb, var(--color-accent) 28%, transparent)",
                 boxShadow:
@@ -425,7 +428,7 @@ export default function Hero() {
 
             {/* Availability pill — top right of the portrait */}
             <motion.div
-              className="absolute -top-1 -right-16 z-30 flex items-center gap-2 px-4 py-2 rounded-full bg-bg-card/90 backdrop-blur-sm whitespace-nowrap"
+              className="absolute -top-1 -right-2 sm:-right-8 lg:-right-16 z-30 flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-bg-card/90 backdrop-blur-sm whitespace-nowrap"
               style={{
                 border: "1px solid color-mix(in srgb, var(--color-accent) 26%, transparent)",
                 boxShadow: "0 8px 26px rgba(0,0,0,0.4), 0 0 20px color-mix(in srgb, var(--color-accent) 16%, transparent)",
@@ -445,7 +448,7 @@ export default function Hero() {
 
             {/* Code card — bottom left of the portrait */}
             <motion.div
-              className="absolute -bottom-2 -left-14 z-30 px-4 py-3 rounded-xl bg-bg-card/92 backdrop-blur-md font-mono text-[11px] leading-relaxed whitespace-nowrap"
+              className="absolute -bottom-2 -left-2 sm:-left-8 lg:-left-14 z-30 px-3 py-2 sm:px-4 sm:py-3 rounded-xl bg-bg-card/92 backdrop-blur-md font-mono text-[10px] sm:text-[11px] leading-relaxed whitespace-nowrap"
               style={{
                 border: "1px solid color-mix(in srgb, var(--color-accent) 20%, transparent)",
                 boxShadow: "0 12px 34px rgba(0,0,0,0.45)",

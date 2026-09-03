@@ -28,7 +28,7 @@ git push -u origin main
 ## 2. Claim Your Free Domain
 
 1. Go to [nc.me](https://nc.me/) and log in with your GitHub account.
-2. Search for an available `.me` domain (e.g., `kavishkadeshan.me`).
+2. Search for an available `.me` domain (e.g., `kavishkadeshan.dev`).
 3. Register it using the free coupon provided by the Student Developer Pack.
 
 > **Note:** The Namecheap Student Pack currently offers a free `.me` domain for 1 year. Verify the current offer at [nc.me/landing/github](https://nc.me/landing/github) as it may change.
@@ -39,7 +39,7 @@ git push -u origin main
 
 At your Namecheap domain dashboard, go to **Domain → Advanced DNS** and add the following records:
 
-### Apex Domain (e.g., `kavishkadeshan.me`)
+### Apex Domain (e.g., `kavishkadeshan.dev`)
 
 Create **4 A records** (one for each GitHub Pages IP):
 
@@ -60,7 +60,7 @@ Create a **CNAME record**:
 |------|------|-------|-----|
 | CNAME | `www` | `Kavishka-Deshan.github.io` | Automatic |
 
-This ensures both `kavishkadeshan.me` and `www.kavishkadeshan.me` work, with automatic redirects between them.
+This ensures both `kavishkadeshan.dev` and `www.kavishkadeshan.dev` work, with automatic redirects between them.
 
 ---
 
@@ -70,7 +70,7 @@ This ensures both `kavishkadeshan.me` and `www.kavishkadeshan.me` work, with aut
 2. Click **Settings → Pages** (under "Code, planning, and automation").
 3. Under **Build and deployment**, set:
    - **Source:** GitHub Actions
-4. Under **Custom domain**, type your domain (e.g., `kavishkadeshan.me`) and click **Save**.
+4. Under **Custom domain**, type your domain (e.g., `kavishkadeshan.dev`) and click **Save**.
 5. Wait for the DNS check to pass (can take up to 24 hours).
 6. Once the check passes, check **Enforce HTTPS**.
 
@@ -83,7 +83,7 @@ This ensures both `kavishkadeshan.me` and `www.kavishkadeshan.me` work, with aut
 `public/CNAME` already exists and contains:
 
 ```
-kavishkadeshan.me
+kavishkadeshan.dev
 ```
 
 It is copied into the published site on every build, which is what stops GitHub
@@ -105,7 +105,7 @@ After pushing to `main`, the GitHub Actions workflow will automatically build an
 
 1. Go to **Settings → Pages** in your repository.
 2. Under "GitHub Pages", you should see a green checkmark and the URL.
-3. Visit your custom domain (e.g., `https://kavishkadeshan.me`).
+3. Visit your custom domain (e.g., `https://kavishkadeshan.dev`).
 4. Check that:
    - The site loads correctly
    - All sections render (Hero, About, Skills, Projects, Education, Contact)

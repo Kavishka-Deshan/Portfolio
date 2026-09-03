@@ -27,7 +27,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   // Without this, Next cannot resolve Open Graph / Twitter image URLs to
   // absolute ones and warns on every build.
-  metadataBase: new URL("https://kavishkadeshan.me"),
+  metadataBase: new URL("https://kavishkadeshan.dev"),
   // Tells search engines which URL is authoritative, so ?utm= and similar
   // variants do not get indexed as separate pages.
   alternates: { canonical: "/" },
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     description:
       "Fullstack developer building mobile and web applications end to end, from database design and API integration through to the user interface.",
     type: "website",
-    url: "https://kavishkadeshan.me",
+    url: "https://kavishkadeshan.dev",
     siteName: "Kavishka Deshan",
     locale: "en_US",
     images: [

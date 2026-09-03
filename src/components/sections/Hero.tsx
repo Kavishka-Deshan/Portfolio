@@ -132,16 +132,25 @@ function TypingText({ text, delay = 0 }: { text: string; delay?: number }) {
     return () => clearTimeout(timeout);
   }, [text, delay]);
 
+  /*
+   * The animated copy starts empty, so on the server-rendered HTML this text
+   * did not exist at all — invisible to crawlers. The full string is now always
+   * present in an sr-only span (static, so no hydration mismatch), and the
+   * animated copy is marked decorative so screen readers do not read it twice.
+   */
   return (
     <span>
-      {displayed}
-      {showCursor && (
-        <motion.span
-          className="inline-block w-[2px] h-[1em] bg-accent ml-0.5 align-middle"
-          animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.6, repeat: Infinity }}
-        />
-      )}
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        {displayed}
+        {showCursor && (
+          <motion.span
+            className="inline-block w-[2px] h-[1em] bg-accent ml-0.5 align-middle"
+            animate={{ opacity: [1, 0] }}
+            transition={{ duration: 0.6, repeat: Infinity }}
+          />
+        )}
+      </span>
     </span>
   );
 }
@@ -214,6 +223,9 @@ export default function Hero() {
               <span className="block">
                 <AnimatedName text="KAVISHKA" />
               </span>
+              {/* Real space: without it the two blocks concatenate and a crawler
+                  reads the heading as "KAVISHKADESHAN". */}
+              {" "}
               <span className="block">
                 <AnimatedName text="DESHAN" outline />
               </span>
@@ -229,7 +241,8 @@ export default function Hero() {
 
             {/* Description */}
             <motion.p variants={item} className="text-text-muted text-base leading-relaxed mb-10 max-w-lg">
-              I design and build modern web applications, from polished interfaces to fast, secure, and scalable backend systems.
+              Software Engineering undergraduate at NIBM, Sri Lanka. I design and build modern web
+              applications, from polished interfaces to fast, secure, and scalable backend systems.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -355,7 +368,7 @@ export default function Hero() {
               <div className="absolute inset-0 overflow-hidden rounded-full">
                 <Image
                   src={site.photo}
-                  alt="Profile photo"
+                  alt="Kavishka Deshan, Software Engineering undergraduate and fullstack developer"
                   width={320}
                   height={320}
                   priority

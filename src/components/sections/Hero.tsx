@@ -9,7 +9,7 @@ import { site } from "@/content/portfolio";
 function FloatingOrb({ x, y, size, delay, duration }: { x: number; y: number; size: number; delay: number; duration: number }) {
   return (
     <motion.div
-      className="absolute rounded-full pointer-events-none"
+      className="absolute rounded-full pointer-events-none will-change-transform"
       style={{ left: `${x}%`, top: `${y}%`, width: size, height: size, background: "radial-gradient(circle, rgba(168,85,247,0.15) 0%, transparent 70%)" }}
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: [0, 0.5, 0], scale: [0, 1.5, 0], y: [0, -80, -160] }}
@@ -181,7 +181,15 @@ export default function Hero() {
         t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
         return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
       };
-      return Array.from({ length: 20 }, (_, i) => ({ id: i, x: 5 + rand() * 90, y: 15 + rand() * 70, size: 3 + rand() * 6, delay: rand() * 6, duration: 4 + rand() * 5 }));
+      /*
+       * LOADER_MS offsets every orb's start past the entrance overlay. These 20
+       * infinite animations used to begin at mount — running, invisible, behind
+       * the loader — and competed with it for frames during hydration, which is
+       * exactly when the browser is busiest. Nothing is lost visually: they were
+       * hidden until the curtain cleared anyway.
+       */
+      const LOADER_MS = 1.9;
+      return Array.from({ length: 20 }, (_, i) => ({ id: i, x: 5 + rand() * 90, y: 15 + rand() * 70, size: 3 + rand() * 6, delay: LOADER_MS + rand() * 6, duration: 4 + rand() * 5 }));
     },
     []
   );

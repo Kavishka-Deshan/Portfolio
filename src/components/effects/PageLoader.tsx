@@ -26,8 +26,8 @@ const HOLD_MS = 1800;
  * this overlay is server-rendered too, and random values would produce a
  * different DOM on the client and trip a hydration mismatch.
  */
-const MOTES = Array.from({ length: 14 }, (_, i) => {
-  const angle = (i / 14) * Math.PI * 2;
+const MOTES = Array.from({ length: 8 }, (_, i) => {
+  const angle = (i / 8) * Math.PI * 2;
   return {
     x: Math.cos(angle) * 300,
     y: Math.sin(angle) * 220,
@@ -107,14 +107,23 @@ export default function PageLoader() {
           exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)", pointerEvents: "none" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Breathing bloom */}
+          {/*
+            Breathing bloom.
+            `scale` is deliberately NOT animated here: scaling a heavily blurred
+            element makes the browser re-rasterise the blur on every frame, which
+            was the main source of stutter. Opacity alone is a compositor-only
+            property, so this now costs nothing per frame. The blur radius is
+            also lower (150px -> 90px) — at this size the look is identical but
+            the initial raster is far cheaper.
+          */}
           <motion.div
-            className="absolute w-[520px] h-[520px] rounded-full blur-[150px] pointer-events-none"
+            className="absolute w-[560px] h-[560px] rounded-full blur-[90px] pointer-events-none will-change-[opacity]"
             style={{
               background:
-                "radial-gradient(circle, color-mix(in srgb, var(--color-accent) 22%, transparent) 0%, transparent 70%)",
+                "radial-gradient(circle, color-mix(in srgb, var(--color-accent) 20%, transparent) 0%, transparent 70%)",
+              transform: "translateZ(0)",
             }}
-            animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.9, 0.5] }}
+            animate={{ opacity: [0.5, 0.9, 0.5] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
 
@@ -133,7 +142,7 @@ export default function PageLoader() {
             {MOTES.map((m, i) => (
               <motion.span
                 key={i}
-                className="absolute rounded-full bg-accent"
+                className="absolute rounded-full bg-accent will-change-transform"
                 style={{ width: m.size, height: m.size }}
                 initial={{ x: m.x, y: m.y, opacity: 0 }}
                 animate={{ x: 0, y: 0, opacity: [0, 0.7, 0] }}
@@ -180,7 +189,7 @@ export default function PageLoader() {
 
               {/* Conic gradient sweeping the tile border */}
               <motion.div
-                className="absolute inset-[-2px] rounded-2xl pointer-events-none"
+                className="absolute inset-[-2px] rounded-2xl pointer-events-none will-change-transform"
                 style={{
                   background:
                     "conic-gradient(from 0deg, transparent 0deg, color-mix(in srgb, var(--color-accent) 85%, transparent) 40deg, transparent 110deg)",
@@ -197,25 +206,23 @@ export default function PageLoader() {
 
               {/* The tile */}
               <motion.div
-                className="relative w-24 h-24 rounded-2xl border-2 flex items-center justify-center bg-bg-card/50 backdrop-blur-sm"
+                className="relative w-24 h-24 rounded-2xl border-2 flex items-center justify-center bg-bg-card/80"
                 style={{ borderColor: "color-mix(in srgb, var(--color-accent) 22%, transparent)" }}
                 initial={{ scale: 0.85, opacity: 0, rotate: -8 }}
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               >
-                {/* Monogram with a periodic RGB-split glitch */}
+                {/*
+                  Monogram with a periodic glitch.
+                  The split used to be an animated `textShadow`. text-shadow is a
+                  paint property — it cannot run on the compositor, so every
+                  frame of the glitch forced a repaint of the text. It is now a
+                  transform-only jitter, which is free by comparison; the colour
+                  fringe is a static shadow that simply fades in and out.
+                */}
                 <motion.div
-                  className="flex items-center font-[family-name:var(--font-mono)] text-2xl font-bold"
-                  animate={{
-                    x: [0, 0, -2, 2, 0],
-                    textShadow: [
-                      "0 0 0 transparent",
-                      "0 0 0 transparent",
-                      "2px 0 var(--color-neon-bright), -2px 0 color-mix(in srgb, var(--color-accent) 90%, transparent)",
-                      "-2px 0 var(--color-neon-bright), 2px 0 color-mix(in srgb, var(--color-accent) 90%, transparent)",
-                      "0 0 0 transparent",
-                    ],
-                  }}
+                  className="flex items-center font-[family-name:var(--font-mono)] text-2xl font-bold will-change-transform"
+                  animate={{ x: [0, 0, -2, 2, 0] }}
                   transition={{ duration: 0.45, repeat: Infinity, repeatDelay: 1.5, times: [0, 0.5, 0.65, 0.8, 1] }}
                 >
                   {["K", "D"].map((ch, i) => (
